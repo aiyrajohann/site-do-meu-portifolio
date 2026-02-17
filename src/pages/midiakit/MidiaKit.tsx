@@ -1,6 +1,50 @@
+import { useEffect, useMemo, useState } from "react";
 import { midiaKit } from "../../data/midiaKit";
 
+type IgMetrics = {
+  username: string;
+  followers: number;
+  mediaCount: number;
+  updatedAt: string;
+};
+
 export function MidiaKit() {
+  const [ig, setIg] = useState<IgMetrics | null>(null);
+
+  useEffect(() => {
+    let alive = true;
+
+    async function load() {
+      try {
+        const r = await fetch("/api/instagram");
+        if (!r.ok) return;
+        const data = (await r.json()) as IgMetrics;
+        if (alive) setIg(data);
+      } catch {
+        // fallback: fica com os valores do midiaKit.ts
+      }
+    }
+
+    load();
+    const id = setInterval(load, 5 * 60 * 1000); // 5 min
+    return () => {
+      alive = false;
+      clearInterval(id);
+    };
+  }, []);
+
+  const metricasRender = useMemo(() => {
+    return midiaKit.metricas.map((m) => {
+      if (m.label === "Seguidores Instagram" && ig?.followers != null) {
+        return { ...m, value: ig.followers.toLocaleString("pt-BR") };
+      }
+      if (m.label === "Posts Instagram" && ig?.mediaCount != null) {
+        return { ...m, value: ig.mediaCount.toLocaleString("pt-BR") };
+      }
+      return m;
+    });
+  }, [ig]);
+
   return (
     <main className="mx-auto max-w-6xl px-4 py-10">
       <h1 className="text-2xl font-bold">Mídia Kit</h1>
@@ -48,13 +92,19 @@ export function MidiaKit() {
         <aside className="rounded-3xl bg-slate-900 p-7">
           <h3 className="text-lg font-semibold">Métricas</h3>
           <div className="mt-4 space-y-3">
-            {midiaKit.metricas.map((m) => (
+            {metricasRender.map((m) => (
               <div key={m.label} className="rounded-2xl bg-white/5 p-5">
                 <p className="text-sm text-white/60">{m.label}</p>
                 <p className="mt-1 text-xl font-black">{m.value}</p>
               </div>
             ))}
           </div>
+
+          {ig?.updatedAt && (
+            <p className="mt-4 text-xs text-white/40">
+              Atualizado em {new Date(ig.updatedAt).toLocaleString("pt-BR")}
+            </p>
+          )}
         </aside>
       </section>
     </main>
