@@ -21,7 +21,7 @@ export function MidiaKit() {
         const data = (await r.json()) as IgMetrics;
         if (alive) setIg(data);
       } catch {
-        // fallback: fica com os valores do midiaKit.ts
+        // Se falhar, usa os valores estáticos do midiaKit.ts
       }
     }
 
@@ -38,9 +38,11 @@ export function MidiaKit() {
       if (m.label === "Seguidores Instagram" && ig?.followers != null) {
         return { ...m, value: ig.followers.toLocaleString("pt-BR") };
       }
+
       if (m.label === "Posts Instagram" && ig?.mediaCount != null) {
         return { ...m, value: ig.mediaCount.toLocaleString("pt-BR") };
       }
+
       return m;
     });
   }, [ig]);
@@ -50,7 +52,7 @@ export function MidiaKit() {
       <h1 className="text-2xl font-bold">Mídia Kit</h1>
 
       <section className="mt-6 grid gap-4 lg:grid-cols-3">
-        <div className="rounded-3xl bg-slate-900 p-7 lg:col-span-2">
+        <div className="rounded-3xl bg-slate-900 p-7 lg:col-span-2 text-white">
           <h2 className="text-2xl font-bold">{midiaKit.nome}</h2>
           <p className="mt-2 text-white/70">{midiaKit.nicho}</p>
 
@@ -77,7 +79,7 @@ export function MidiaKit() {
             </ul>
           </div>
 
-          {midiaKit.mediaKitPdfUrl && (
+          {!!midiaKit.mediaKitPdfUrl && (
             <a
               href={midiaKit.mediaKitPdfUrl}
               target="_blank"
@@ -89,8 +91,16 @@ export function MidiaKit() {
           )}
         </div>
 
-        <aside className="rounded-3xl bg-slate-900 p-7">
-          <h3 className="text-lg font-semibold">Métricas</h3>
+        <aside className="rounded-3xl bg-slate-900 p-7 text-white">
+          <div className="flex items-center justify-between gap-3">
+            <h3 className="text-lg font-semibold">Métricas</h3>
+            {ig?.username && (
+              <span className="rounded-full bg-white/10 px-3 py-1 text-xs text-white/70">
+                @{ig.username}
+              </span>
+            )}
+          </div>
+
           <div className="mt-4 space-y-3">
             {metricasRender.map((m) => (
               <div key={m.label} className="rounded-2xl bg-white/5 p-5">

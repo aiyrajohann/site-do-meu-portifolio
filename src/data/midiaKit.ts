@@ -9,8 +9,10 @@ export const midiaKit = {
   },
   metricas: [
     { label: "Seguidores Instagram", value: "____" },
+    { label: "Posts Instagram", value: "____" }, 
     { label: "Média de visualizações", value: "____" },
     { label: "Taxa de engajamento", value: "____" },
+
   ],
   parcerias: [
     "Publis e reviews honestos",
