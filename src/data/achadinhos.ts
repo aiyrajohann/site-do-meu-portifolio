@@ -1,0 +1,32 @@
+export type Achadinho = {
+  id: string;
+  titulo: string;
+  descricao: string;
+  link: string;
+  preco?: string;
+  imagemUrl?: string;
+  tags?: string[];
+};
+
+export const achadinhos: Achadinho[] = [
+  {
+    id: "porta-aspirador",
+    titulo: "Suporte de parede pro aspirador",
+    descricao:
+      "Organiza e deixa o aspirador sempre à mão. Ajuda demais na rotina.",
+    link: "https://shopee.com.br/",
+    preco: "R$ 29,90",
+    imagemUrl: "https://via.placeholder.com/900x600",
+    tags: ["organização", "casa", "rotina"],
+  },
+  {
+    id: "organizador-geladeira",
+    titulo: "Organizador de geladeira (kit)",
+    descricao:
+      "Pra parar de perder pote e espaço na geladeira. Sim, isso acontece.",
+    link: "https://shopee.com.br/",
+    preco: "R$ 44,90",
+    imagemUrl: "https://via.placeholder.com/900x600",
+    tags: ["cozinha", "organização"],
+  },
+];
