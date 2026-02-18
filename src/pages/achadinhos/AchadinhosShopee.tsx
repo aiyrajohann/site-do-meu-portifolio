@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { achadinhos } from "../../data/achadinhos";
+import { achadinhos } from "../../data/achadinhos.store";
 
 export function AchadinhosShopee() {
   return (
